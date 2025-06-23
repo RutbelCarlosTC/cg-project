@@ -1,0 +1,17 @@
+name: sign-recognition-env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - numpy
+  - pandas>=1.4.0  # Updated to support Python 3.10
+
+  - pip:
+      - fastdtw==0.3.4
+      - mediapipe>=0.10.5  # Updated to available version
+      - opencv-contrib-python>=4.5.4.60  # More flexible version
+      - pytube>=11.0.1  # More flexible version
+      - tqdm==4.66.4  # corrigido: tdqm → tqdm
+
