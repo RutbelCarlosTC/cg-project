@@ -51,7 +51,7 @@ class WebcamManager(object):
         font_size=1,
         font_thickness=2,
         offset=int(HEIGHT * 0.02),
-        bg_color=(245, 242, 176, 0.85),
+        bg_color=(255, 255, 255, 0.55),
     ):
         window_w = int(HEIGHT * len(frame[0]) / len(frame))
 
