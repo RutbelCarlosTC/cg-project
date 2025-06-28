@@ -6,12 +6,11 @@ import mediapipe as mp
 from utils.mediapipe_utils import mediapipe_detection
 
 
-def landmark_to_array(mp_landmark_list):
+def landmark_to_array(mp_landmark_list, num_points):
     """Return a np array of size (nb_keypoints x 3)"""
-    keypoints = []
-    for landmark in mp_landmark_list.landmark:
-        keypoints.append([landmark.x, landmark.y, landmark.z])
-    return np.nan_to_num(keypoints)
+    if mp_landmark_list is None:
+        return np.zeros((num_points, 3))
+    return np.array([[lmk.x, lmk.y, lmk.z] for lmk in mp_landmark_list.landmark])
 
 
 def extract_landmarks(results):
@@ -21,18 +20,11 @@ def extract_landmarks(results):
     :param results: mediapipe object that contains the 3D position of all keypoints
     :return: Two np arrays of size (1, 21 * 3) = (1, nb_keypoints * nb_coordinates) corresponding to both hands
     """
-    pose = landmark_to_array(results.pose_landmarks).reshape(99).tolist()
-
-    left_hand = np.zeros(63).tolist()
-    if results.left_hand_landmarks:
-        left_hand = landmark_to_array(results.left_hand_landmarks).reshape(63).tolist()
-
-    right_hand = np.zeros(63).tolist()
-    if results.right_hand_landmarks:
-        right_hand = (
-            landmark_to_array(results.right_hand_landmarks).reshape(63).tolist()
-        )
+    pose = landmark_to_array(results.pose_landmarks, 33).reshape(99).tolist()
+    left_hand = landmark_to_array(results.left_hand_landmarks, 21).reshape(63).tolist()
+    right_hand = landmark_to_array(results.right_hand_landmarks, 21).reshape(63).tolist()
     return pose, left_hand, right_hand
+
 
 
 def save_landmarks_from_video(video_name):
