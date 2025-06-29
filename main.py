@@ -36,13 +36,12 @@ if __name__ == "__main__":
     print("Webcam opened successfully!")
     print("Press 'r' to record a sign, 'q' to quit")
     
-    # Set up the Mediapipe environment
     with mediapipe.solutions.holistic.Holistic(
         min_detection_confidence=0.5, min_tracking_confidence=0.5
     ) as holistic:
+        last_sign = None  # Variable para almacenar la última seña detectada
+        
         while cap.isOpened():
-
-            # Read feed
             ret, frame = cap.read()
             
             if not ret:
@@ -54,15 +53,20 @@ if __name__ == "__main__":
 
             # Process results
             sign_detected, is_recording = sign_recorder.process_results(results)
+            
+            # Imprimir solo cuando se detecta una nueva seña
+            if sign_detected and sign_detected != "Seña desconocida" and sign_detected != last_sign:
+                print(f"\nSeña detectada: {sign_detected}")  # Mensaje simple en terminal
+                last_sign = sign_detected  # Actualizar la última seña
 
             # Update the frame (draw landmarks & display result)
             webcam_manager.update(frame, results, sign_detected, is_recording)
 
             pressedKey = cv2.waitKey(1) & 0xFF
-            if pressedKey == ord("r"):  # Record pressing r
+            if pressedKey == ord("r"):
                 print("Recording toggled!")
                 sign_recorder.record()
-            elif pressedKey == ord("q"):  # Break pressing q
+            elif pressedKey == ord("q"):
                 print("Quitting...")
                 break
 
