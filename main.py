@@ -1,71 +1,115 @@
-import cv2
-import mediapipe
+import customtkinter as ctk
+from pages.games_selector import GameSelectionPage
+from pages.abecedario import SenhaWindow
+from pages.lista_senas import ListaSenasWindow
+from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
 
-from utils.dataset_utils import load_dataset, load_reference_signs
-from utils.mediapipe_utils import mediapipe_detection
-from sign_recorder import SignRecorder
-from webcam_manager import WebcamManager
-
+class MainApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("EnSEÑA PLAY")
+        self.geometry("900x600")
+        self.minsize(800, 500)
+        
+        # Modo visual (opcional)
+        ctk.set_appearance_mode("light")  # o "dark"
+        ctk.set_default_color_theme("blue")  # azul, dark-blue, green, etc.
+        
+        # === Contenedor principal ===
+        container = ctk.CTkFrame(self, corner_radius=0)
+        container.pack(fill="both", expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+        
+        self.frames = {}
+        
+        # === Páginas ===
+        # Menú principal
+        self.menu_page = self.create_menu(container)
+        self.frames["Menu"] = self.menu_page
+        
+        # Página de selección de juegos
+        game_page = GameSelectionPage(parent=container, controller=self)
+        self.frames["GameSelectionPage"] = game_page
+        game_page.grid(row=0, column=0, sticky="nsew")
+        
+        # Página de lista de señas
+        lista_page = ListaSenasWindow(parent=container, controller=self)
+        self.frames["ListaSenasWindow"] = lista_page
+        lista_page.grid(row=0, column=0, sticky="nsew")
+        
+        # Juego Secuencia de Señas
+        secuencia_game = SecuenciaSeñasGame(parent=container, controller=self)
+        self.frames["SecuenciaSeñasGame"] = secuencia_game
+        secuencia_game.grid(row=0, column=0, sticky="nsew")
+        
+        # Mostrar menú principal al inicio
+        self.show_frame("Menu")
+    
+    def create_menu(self, parent):
+        frame = ctk.CTkFrame(parent, fg_color="#AEEEEE")  # Fondo celeste
+        frame.grid(row=0, column=0, sticky="nsew")
+        
+        # Título principal
+        title_label = ctk.CTkLabel(
+            frame,
+            text="EnSEÑA PLAY",
+            font=ctk.CTkFont("Helvetica", 48, weight="bold"),
+            text_color="#003366"
+        )
+        title_label.pack(pady=40)
+        
+        # Contenedor de botones
+        buttons_frame = ctk.CTkFrame(frame, fg_color="#AEEEEE")
+        buttons_frame.pack(pady=30)
+        
+        # Opciones del menú
+        options = ["Jugar", "Como Jugar", "Lista de Señas", "Opciones", "Salir"]
+        
+        for option in options:
+            btn = ctk.CTkButton(
+                buttons_frame,
+                text=option,
+                font=ctk.CTkFont("Helvetica", size=35, weight="bold"),
+                width=350,
+                fg_color="#008B8B",
+                hover_color="#20B2AA",
+                text_color="white",
+                command=lambda opt=option: self.handle_option(opt)
+            )
+            btn.pack(pady=10, fill="x", expand=True)
+        
+        return frame
+    
+    def handle_option(self, option):
+        if option == "Salir":
+            self.destroy()
+        elif option == "Jugar":
+            self.show_frame("GameSelectionPage")
+        elif option == "Lista de Señas":
+            self.show_frame("ListaSenasWindow")
+        else:
+            print(f"Seleccionaste: {option}")
+    
+    def show_frame(self, page_name):
+        """Cambiar a la página especificada"""
+        if page_name in self.frames:
+            frame = self.frames[page_name]
+            frame.tkraise()
+        else:
+            print(f"Error: Página '{page_name}' no encontrada")
+    
+    def destroy(self):
+        """Cleanup al cerrar la aplicación"""
+        # Limpiar recursos de las páginas que lo requieran
+        if "SecuenciaSeñasGame" in self.frames:
+            try:
+                self.frames["SecuenciaSeñasGame"].destroy()
+            except:
+                pass
+        
+        super().destroy()
 
 if __name__ == "__main__":
-    # Create dataset of the videos where landmarks have not been extracted yet
-    videos = load_dataset()
-
-    # Create a DataFrame of reference signs (name: str, model: SignModel, distance: int)
-    reference_signs = load_reference_signs(videos)
-
-    # Object that stores mediapipe results and computes sign similarities
-    sign_recorder = SignRecorder(reference_signs)
-
-    # Object that draws keypoints & displays results
-    webcam_manager = WebcamManager()
-
-    # Turn on the webcam
-    print("Attempting to open webcam...")
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    
-    # Check if webcam opened successfully
-    if not cap.isOpened():
-        print("Error: Could not open webcam")
-        print("Trying without CAP_DSHOW...")
-        cap = cv2.VideoCapture(0)
-        if not cap.isOpened():
-            print("Error: Still could not open webcam")
-            exit(1)
-    
-    print("Webcam opened successfully!")
-    print("Press 'r' to record a sign, 'q' to quit")
-    
-    # Set up the Mediapipe environment
-    with mediapipe.solutions.holistic.Holistic(
-        min_detection_confidence=0.5, min_tracking_confidence=0.5
-    ) as holistic:
-        while cap.isOpened():
-
-            # Read feed
-            ret, frame = cap.read()
-            
-            if not ret:
-                print("Error: Could not read frame from webcam")
-                break
-
-            # Make detections
-            image, results = mediapipe_detection(frame, holistic)
-
-            # Process results
-            sign_detected, is_recording = sign_recorder.process_results(results)
-
-            # Update the frame (draw landmarks & display result)
-            webcam_manager.update(frame, results, sign_detected, is_recording)
-
-            pressedKey = cv2.waitKey(1) & 0xFF
-            if pressedKey == ord("r"):  # Record pressing r
-                print("Recording toggled!")
-                sign_recorder.record()
-            elif pressedKey == ord("q"):  # Break pressing q
-                print("Quitting...")
-                break
-
-        cap.release()
-        cv2.destroyAllWindows()
-        print("Program ended successfully")
+    app = MainApp()
+    app.mainloop()
