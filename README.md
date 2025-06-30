@@ -1,6 +1,6 @@
 ### crear el entorno
 ```
-conda env create -f enviroment.yaml
+conda env create -f environment.yaml
 ```
 ### Crear dataset
 ```

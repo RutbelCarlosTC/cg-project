@@ -1,14 +1,19 @@
 name,id,start_time,duration_time
-Buenos dias,jwU8QcH6bcI,00:01:24.080,00:00:01.850
-Buenas tardes,jwU8QcH6bcI,00:02:20.610,00:00:01.850
-Buenas noches,jwU8QcH6bcI,00:02:55.319,00:00:01.850
-Adiós,jwU8QcH6bcI,00:04:36.240,00:00:01.320
+Adios,jwU8QcH6bcI,00:04:36.240,00:00:01.320
 Hasta manana,jwU8QcH6bcI,00:05:26.129,00:00:02.00
 Hasta luego,jwU8QcH6bcI,00:05:56.360,00:00:01.850
-Lo siento,hr0LVz_TJ5k,00:00:05.899,00:00:02.280
-Por favor,dXoKSRjhpVg,00:00:27.800,00:00:01.320
 Gracias,dXoKSRjhpVg,00:00:32.720,00:00:01.000
 De nada,dXoKSRjhpVg,00:00:36.360,00:00:00.920
+Jugar,qUM2LXgS7fo,00:03:29.00,00:00:01.320
+Vecino,cn3Hmwflsg0,00:01:22.00,00:00:01.320
+Casa,cn3Hmwflsg0,00:01:36.00,00:00:00.920
+Companero,cn3Hmwflsg0,00:02:20.00,00:00:01.320 
+Celeste,icrHxfdysV4, 00:02:23.00,00:00:01.320
+Verde,icrHxfdysV4, 00:03:23.00,00:00:00.920
+Mi,XKsq6sdMlDM,00:10:15.00,00:00:00.920
+Aplaudir,XKsq6sdMlDM,00:11:57.00,00:00:00.920
+Botar,XKsq6sdMlDM,00:15:49.00,00:00:00.920
+Basura,XKsq6sdMlDM,00:15:59.50,00:00:01.320
 A,QBwJwZYziUY,00:00:47.010,00:00:01.01
 B,CF5ShXjdYEw,00:00:53.200,00:00:01.920
 C,CF5ShXjdYEw,00:01:05.100,00:00:01.030
