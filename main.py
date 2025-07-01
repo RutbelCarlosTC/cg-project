@@ -3,6 +3,7 @@ from pages.games_selector import GameSelectionPage
 from pages.abecedario import SenhaWindow
 from pages.lista_senas import ListaSenasWindow
 from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
+from pages.adivina_palabra.secuencia_senas import AdivinaPalabraGame
 
 class MainApp(ctk.CTk):
     def __init__(self):
@@ -41,6 +42,11 @@ class MainApp(ctk.CTk):
         # Juego Secuencia de Señas
         secuencia_game = SecuenciaSeñasGame(parent=container, controller=self)
         self.frames["SecuenciaSeñasGame"] = secuencia_game
+        secuencia_game.grid(row=0, column=0, sticky="nsew")
+
+        # Juego Secuencia de Señas
+        secuencia_game = AdivinaPalabraGame(parent=container, controller=self)
+        self.frames["AdivinaPalabraGame"] = secuencia_game
         secuencia_game.grid(row=0, column=0, sticky="nsew")
         
         # Mostrar menú principal al inicio
