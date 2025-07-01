@@ -3,6 +3,7 @@ from pages.games_selector import GameSelectionPage
 from pages.abecedario import SenhaWindow
 from pages.lista_senas import ListaSenasWindow
 from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
+from pages.imitacion.imitacion_senas import ImitacionSeñasGame
 
 class MainApp(ctk.CTk):
     def __init__(self):
@@ -38,6 +39,11 @@ class MainApp(ctk.CTk):
         self.frames["ListaSenasWindow"] = lista_page
         lista_page.grid(row=0, column=0, sticky="nsew")
         
+        #Juegos Imitacion de Señas
+        imitacion_game = ImitacionSeñasGame(parent=container, controller=self)
+        self.frames["ImitacionSeñasGame"] = imitacion_game
+        imitacion_game.grid(row=0, column=0, sticky="nsew")
+
         # Juego Secuencia de Señas
         secuencia_game = SecuenciaSeñasGame(parent=container, controller=self)
         self.frames["SecuenciaSeñasGame"] = secuencia_game
@@ -107,7 +113,13 @@ class MainApp(ctk.CTk):
                 self.frames["SecuenciaSeñasGame"].destroy()
             except:
                 pass
-        
+            
+        elif "ImitacionSeñasGame" in self.frames:
+            try:
+                self.frames["ImitacionSeñasGame"].destroy()
+            except:
+                pass
+
         super().destroy()
 
 if __name__ == "__main__":

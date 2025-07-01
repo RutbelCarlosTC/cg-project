@@ -39,7 +39,7 @@ class GameSelectionPage(ctk.CTkFrame):
         self.juegos = [
             {"nombre": "Ahorcado", "imagen": "assets/games/ahorcado.png"}, 
             {"nombre": "Adivina la Palabra", "imagen": "assets/games/adivina_la_palabra.jpeg"},
-            {"nombre": "Reconoce la Seña", "imagen": "assets/games/Reconoce_la_sena.png"},
+            {"nombre": "Imita la Seña", "imagen": "assets/games/Reconoce_la_sena.png"},
             {"nombre": "Secuencia de Señas", "imagen": "assets/games/Secuencia_de_senas.png"},
             {"nombre": "Proximamente", "imagen": "assets/games/proximamente.png"},
             {"nombre": "Proximamente", "imagen": "assets/games/proximamente.png"},
@@ -87,6 +87,8 @@ class GameSelectionPage(ctk.CTkFrame):
         # Navegar según el juego seleccionado
         if nombre_juego == "Secuencia de Señas":
             self.controller.show_frame("SecuenciaSeñasGame")
+        elif nombre_juego == "Imita la Seña":
+            self.controller.show_frame("ImitacionSeñasGame")
         elif nombre_juego == "Proximamente":
             # Mostrar mensaje de próximamente
             import tkinter.messagebox as messagebox
