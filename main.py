@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from pages.games_selector import GameSelectionPage
-from pages.abecedario import SenhaWindow
-from pages.lista_senas import ListaSenasWindow
+from pages.menu_lista.lista_senas import ListaSenasWindow
 from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
 from pages.adivina_palabra.secuencia_senas import AdivinaPalabraGame
 
