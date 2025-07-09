@@ -89,6 +89,8 @@ class GameSelectionPage(ctk.CTkFrame):
             self.controller.show_frame("SecuenciaSeñasGame")
         elif nombre_juego == "Imita la Seña":
             self.controller.show_frame("ImitacionSeñasGame")
+        elif nombre_juego == "Adivina la Palabra":
+            self.controller.show_frame("AdivinaPalabraGame")
         elif nombre_juego == "Proximamente":
             # Mostrar mensaje de próximamente
             import tkinter.messagebox as messagebox

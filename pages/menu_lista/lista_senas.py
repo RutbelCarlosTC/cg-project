@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-
 import customtkinter as ctk
 
 class ListaSenasWindow(ctk.CTkFrame):
@@ -8,6 +7,7 @@ class ListaSenasWindow(ctk.CTkFrame):
         super().__init__(parent)
         self.controller = controller
         self.bg_color = "#AEEEEE"
+        self.abecedario_window = None  # Para mantener referencia de la ventana
 
         self.configure(fg_color=self.bg_color)
         
@@ -66,16 +66,16 @@ class ListaSenasWindow(ctk.CTkFrame):
         ]
         
         for fila in letras:
-            tk.Label(
+            label = tk.Label(
                 abecedario_frame,
                 text=fila,
                 font=("Courier", 18),
-                bg=self.bg_color
-            ).pack(pady=5)
-        
-        # Boton 
-        
-        
+                bg=self.bg_color,
+                cursor="hand2"  # Cursor de mano para indicar que es clickeable
+            )
+            label.pack(pady=5)
+            # Hacer cada línea clickeable también
+            label.bind("<Button-1>", lambda e: self.mostrar_abecedario())
         
         # Sección de palabras
         palabras_frame = tk.LabelFrame(
@@ -97,7 +97,7 @@ class ListaSenasWindow(ctk.CTkFrame):
         ).pack(pady=10)
         
         # Ejemplo de categorías (puedes expandir esto)
-        categorias = ["Familia", "Colores", "Números", "Comida", "Saludos"]
+        categorias = ["Familia", "Colores", "Números", "Alimentos", "Saludos"]
         
         for categoria in categorias:
             btn = tk.Button(
@@ -122,16 +122,20 @@ class ListaSenasWindow(ctk.CTkFrame):
         ).pack(pady=20)
     
     def mostrar_palabras(self, categoria):
-        # Aquí implementarías la lógica para mostrar palabras de la categoría seleccionada
-        print(f"Mostrando palabras de: {categoria}")
-        # Puedes usar otro Toplevel o actualizar la sección de palabras
+        from pages.menu_lista.categoria import CategoriaVideosWindow
+        self.videos_window = CategoriaVideosWindow(self.winfo_toplevel(), categoria)
         
     def mostrar_abecedario(self):
-        # Aquí implementarías la lógica para cambiar a vista de abecedario
-        print(f"Mostrando palabras de: abecedario")
-        from pages.abecedario import SenhaWindow
-        SenhaWindow(self)
-        
+        # Verificar si ya existe una ventana abierta
+        if self.abecedario_window and self.abecedario_window.winfo_exists():
+            # Si ya existe, traerla al frente
+            self.abecedario_window.lift()
+            self.abecedario_window.focus_set()
+        else:
+            # Crear nueva ventana
+            from pages.menu_lista.abecedario import SenhaWindow
+            self.abecedario_window = SenhaWindow(self.winfo_toplevel())
+            print("Abriendo ventana del abecedario")
     
     def cerrar_ventana(self):
         self.controller.show_frame("Menu")
