@@ -9,30 +9,32 @@ from utils.landmark_utils import extract_landmarks
 
 class SignRecorder(object):
     def __init__(self, reference_signs: pd.DataFrame, seq_len=50):
-        # Variables for recording
+        # Variables para la grabación
         self.is_recording = False
         self.seq_len = seq_len
 
-        # List of results stored each frame
+        # Lista para almacenar los resultados de cada fotograma
         self.recorded_results = []
 
-        # DataFrame storing the distances between the recorded sign & all the reference signs from the dataset
+        # DataFrame que almacena las distancias entre la seña grabada y las señas de referencia del dataset
         self.reference_signs = reference_signs
 
     def record(self):
         """
-        Initialize sign_distances & start recording
+        Inicializa las distancias y comienza la grabación
         """
         self.reference_signs["distance"].values[:] = 0
         self.is_recording = True
 
-    def process_results(self, results) -> (str, bool):
+    def process_results(self, results) -> (str, bool):  # type: ignore
         """
-        If the SignRecorder is in the recording state:
-            it stores the landmarks during seq_len frames and then computes the sign distances
-        :param results: mediapipe output
-        :return: Return the word predicted (blank text if there is no distances)
-                & the recording state
+        Si el SignRecorder está en estado de grabación:
+            almacena los puntos de referencia durante seq_len fotogramas
+            y luego calcula las distancias con las señas de referencia
+
+        :param results: salida de mediapipe
+        :return: Devuelve la palabra predicha (texto vacío si no se han calculado distancias)
+                 y el estado de grabación
         """
         if self.is_recording:
             if len(self.recorded_results) < self.seq_len:
@@ -47,8 +49,8 @@ class SignRecorder(object):
 
     def compute_distances(self):
         """
-        Updates the distance column of the reference_signs
-        and resets recording variables
+        Actualiza la columna de distancias del DataFrame reference_signs
+        y reinicia las variables de grabación
         """
         left_hand_list, right_hand_list = [], []
         for results in self.recorded_results:
@@ -56,32 +58,31 @@ class SignRecorder(object):
             left_hand_list.append(left_hand)
             right_hand_list.append(right_hand)
 
-        # Create a SignModel object with the landmarks gathered during recording
+        # Crear un objeto SignModel con los puntos recolectados durante la grabación
         recorded_sign = SignModel(left_hand_list, right_hand_list)
 
-        # Compute sign similarity with DTW (ascending order)
+        # Calcular la similitud con otras señas usando DTW (orden ascendente)
         self.reference_signs = dtw_distances(recorded_sign, self.reference_signs)
 
-        # Reset variables
+        # Reiniciar variables
         self.recorded_results = []
         self.is_recording = False
 
     def _get_sign_predicted(self, batch_size=5, threshold=0.2):
         """
-        Method that outputs the sign that appears the most in the list of closest
-        reference signs, only if its proportion within the batch is greater than the threshold
+        Método que determina la seña más común en el lote de señas de referencia más cercanas,
+        siempre que su proporción sea mayor al umbral especificado
 
-        :param batch_size: Size of the batch of reference signs that will be compared to the recorded sign
-        :param threshold: If the proportion of the most represented sign in the batch is greater than threshold,
-                        we output the sign_name
-                          If not,
-                        we output "Sign not found"
-        :return: The name of the predicted sign
+        :param batch_size: Tamaño del lote de señas de referencia a comparar con la seña grabada
+        :param threshold: Si la proporción de la seña más representada supera el umbral,
+                          se devuelve el nombre de la seña
+                          Si no, se devuelve "Seña desconocida"
+        :return: El nombre de la seña predicha
         """
-        # Get the list (of size batch_size) of the most similar reference signs
+        # Obtener la lista (de tamaño batch_size) de las señas más similares
         sign_names = self.reference_signs.iloc[:batch_size]["name"].values
 
-        # Count the occurrences of each sign and sort them by descending order
+        # Contar las ocurrencias de cada seña y ordenarlas de forma descendente
         sign_counter = Counter(sign_names).most_common()
 
         predicted_sign, count = sign_counter[0]

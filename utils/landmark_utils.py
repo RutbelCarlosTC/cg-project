@@ -20,7 +20,10 @@ def extract_landmarks(results):
     :param results: mediapipe object that contains the 3D position of all keypoints
     :return: Two np arrays of size (1, 21 * 3) = (1, nb_keypoints * nb_coordinates) corresponding to both hands
     """
-    pose = landmark_to_array(results.pose_landmarks, 33).reshape(99).tolist()
+    if results.pose_landmarks:
+        pose = landmark_to_array(results.pose_landmarks, 33).reshape(99).tolist()
+    else:
+        pose = [0.0] * 99
     left_hand = landmark_to_array(results.left_hand_landmarks, 21).reshape(63).tolist()
     right_hand = landmark_to_array(results.right_hand_landmarks, 21).reshape(63).tolist()
     return pose, left_hand, right_hand
