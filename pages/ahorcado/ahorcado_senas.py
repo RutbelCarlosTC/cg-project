@@ -9,7 +9,7 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
     """Juego de Ahorcado integrado con el sistema de navegación principal"""
 
     def __init__(self, parent, controller):
-        super().__init__(parent, fg_color="#B39DDB")
+        super().__init__(parent, fg_color="#ECF0F1")
         self.controller = controller  # Referencia a MainApp
 
         # Estado de inicialización
@@ -32,7 +32,7 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
         self.crear_header()
 
         # Crear frame principal para el juego
-        self.game_frame = ctk.CTkFrame(self, fg_color="#B39DDB")
+        self.game_frame = ctk.CTkFrame(self, fg_color="#ECF0F1")
         self.game_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
 
         # 1. Detector de señas
@@ -57,7 +57,7 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
 
     def crear_header(self):
         """Crea el header con título y botón de regreso"""
-        header_frame = ctk.CTkFrame(self, fg_color="#9C27B0", height=60)
+        header_frame = ctk.CTkFrame(self, fg_color="#EAF6FF", height=60)
         header_frame.grid(row=0, column=0, sticky="ew", padx=0, pady=0)
         header_frame.grid_propagate(False)
 
@@ -67,10 +67,11 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
         # Botón de regreso
         btn_back = ctk.CTkButton(
             header_frame,
-            text="← Volver",
+            text="← Regresar",
             font=ctk.CTkFont(size=16, weight="bold"),
-            fg_color="#7B1FA2",
-            hover_color="#6A1B9A",
+            fg_color="#CCCCCC",
+            hover_color="#AAAAAA",
+            text_color="#003366",
             width=100,
             height=40,
             command=self.volver_al_menu
@@ -80,9 +81,9 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
         # Título del juego
         titulo = ctk.CTkLabel(
             header_frame,
-            text="🎯 Ahorcado - Lenguaje de Señas",
+            text="Ahorcado - Lenguaje de Señas",
             font=ctk.CTkFont(size=24, weight="bold"),
-            text_color="white"
+            text_color="#6B4EBA"
         )
         titulo.grid(row=0, column=1, pady=10, sticky="")
 
@@ -91,8 +92,9 @@ class AhorcadoSeñasGame(ctk.CTkFrame):
             header_frame,
             text="❓",
             font=ctk.CTkFont(size=16, weight="bold"),
-            fg_color="#7B1FA2",
-            hover_color="#6A1B9A",
+            fg_color="#CCCCCC",
+            hover_color="#AAAAAA",
+            text_color="#003366",
             width=40,
             height=40,
             command=self.mostrar_ayuda
