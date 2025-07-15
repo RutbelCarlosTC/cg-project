@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import pygame
 from pages.games_selector import GameSelectionPage
 from pages.menu_lista.lista_senas import ListaSenasWindow
 from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
@@ -11,11 +12,13 @@ class MainApp(ctk.CTk):
         self.title("EnSEÑA PLAY")
         self.geometry("900x600")
         self.minsize(800, 500)
-        
+
         # Modo visual (opcional)
         ctk.set_appearance_mode("light")  # o "dark"
         ctk.set_default_color_theme("blue")  # azul, dark-blue, green, etc.
         
+        self.reproducir_musica()
+
         # === Contenedor principal ===
         container = ctk.CTkFrame(self, corner_radius=0)
         container.pack(fill="both", expand=True)
@@ -56,7 +59,18 @@ class MainApp(ctk.CTk):
         
         # Mostrar menú principal al inicio
         self.show_frame("Menu")
-    
+
+    def reproducir_musica(self):
+        try:
+            if not pygame.mixer.get_init():
+                pygame.mixer.init()
+            ruta = f"assets/senas/musica_relajante.mp3"
+            pygame.mixer.music.load(ruta)
+            pygame.mixer.music.set_volume(0.4)
+            pygame.mixer.music.play(-1)
+        except Exception as e:
+            print(f"[Música] Error al reproducir música: {e}")
+
     def create_menu(self, parent):
         frame = ctk.CTkFrame(parent, fg_color="#AEEEEE")  # Fondo celeste
         frame.grid(row=0, column=0, sticky="nsew")
@@ -91,9 +105,10 @@ class MainApp(ctk.CTk):
             btn.pack(pady=10, fill="x", expand=True)
         
         return frame
-    
+
     def handle_option(self, option):
         if option == "Salir":
+            pygame.mixer.music.stop()
             self.destroy()
         elif option == "Jugar":
             self.show_frame("GameSelectionPage")
@@ -124,7 +139,7 @@ class MainApp(ctk.CTk):
                 self.frames["ImitacionSeñasGame"].destroy()
             except:
                 pass
-
+        
         super().destroy()
 
 if __name__ == "__main__":
