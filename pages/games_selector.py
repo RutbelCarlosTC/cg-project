@@ -85,7 +85,9 @@ class GameSelectionPage(ctk.CTkFrame):
         print(f"Iniciar {nombre_juego}")
         
         # Navegar según el juego seleccionado
-        if nombre_juego == "Secuencia de Señas":
+        if nombre_juego == "Ahorcado":
+            self.controller.show_frame("AhorcadoSeñasGame")
+        elif nombre_juego == "Secuencia de Señas":
             self.controller.show_frame("SecuenciaSeñasGame")
         elif nombre_juego == "Imita la Seña":
             self.controller.show_frame("ImitacionSeñasGame")

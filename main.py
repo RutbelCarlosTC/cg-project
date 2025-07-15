@@ -1,10 +1,14 @@
 import customtkinter as ctk
 import pygame
+
 from pages.games_selector import GameSelectionPage
+from pages.abecedario import SenhaWindow
 from pages.menu_lista.lista_senas import ListaSenasWindow
+#from pages.lista_senas import ListaSenasWindow
 from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
 from pages.imitacion.imitacion_senas import ImitacionSeñasGame
 from pages.adivina_palabra.secuencia_senas import AdivinaPalabraGame
+from pages.ahorcado.ahorcado_senas import AhorcadoSeñasGame
 
 class MainApp(ctk.CTk):
     def __init__(self):
@@ -56,7 +60,12 @@ class MainApp(ctk.CTk):
         secuencia_game = AdivinaPalabraGame(parent=container, controller=self)
         self.frames["AdivinaPalabraGame"] = secuencia_game
         secuencia_game.grid(row=0, column=0, sticky="nsew")
-        
+
+        # Juego Ahorcado
+        ahorcado_game = AhorcadoSeñasGame(parent=container, controller=self)
+        self.frames["AhorcadoSeñasGame"] = ahorcado_game
+        ahorcado_game.grid(row=0, column=0, sticky="nsew")
+
         # Mostrar menú principal al inicio
         self.show_frame("Menu")
 
@@ -70,11 +79,11 @@ class MainApp(ctk.CTk):
             pygame.mixer.music.play(-1)
         except Exception as e:
             print(f"[Música] Error al reproducir música: {e}")
-
+        
     def create_menu(self, parent):
         frame = ctk.CTkFrame(parent, fg_color="#AEEEEE")  # Fondo celeste
         frame.grid(row=0, column=0, sticky="nsew")
-        
+
         # Título principal
         title_label = ctk.CTkLabel(
             frame,
@@ -89,7 +98,7 @@ class MainApp(ctk.CTk):
         buttons_frame.pack(pady=30)
         
         # Opciones del menú
-        options = ["Jugar", "Como Jugar", "Lista de Señas", "Opciones", "Salir"]
+        options = ["Jugar", "Lista de Señas", "Opciones", "Salir"]
         
         for option in options:
             btn = ctk.CTkButton(
@@ -145,3 +154,4 @@ class MainApp(ctk.CTk):
 if __name__ == "__main__":
     app = MainApp()
     app.mainloop()
+

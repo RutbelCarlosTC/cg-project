@@ -75,30 +75,61 @@ class WebcamManager(object):
 
     @staticmethod
     def draw_landmarks(image, results):
-        mp_holistic = mp.solutions.holistic  # Holistic model
-        mp_drawing = mp.solutions.drawing_utils  # Drawing utilities
+        mp_holistic = mp.solutions.holistic
+        mp_drawing = mp.solutions.drawing_utils
 
-        # Draw left hand connections
-        mp_drawing.draw_landmarks(
-            image,
-            landmark_list=results.left_hand_landmarks,
-            connections=mp_holistic.HAND_CONNECTIONS,
-            landmark_drawing_spec=mp_drawing.DrawingSpec(
-                color=(232, 254, 255), thickness=1, circle_radius=1
-            ),
-            connection_drawing_spec=mp_drawing.DrawingSpec(
-                color=(255, 249, 161), thickness=2, circle_radius=2
-            ),
-        )
-        # Draw right hand connections
-        mp_drawing.draw_landmarks(
-            image,
-            landmark_list=results.right_hand_landmarks,
-            connections=mp_holistic.HAND_CONNECTIONS,
-            landmark_drawing_spec=mp_drawing.DrawingSpec(
-                color=(232, 254, 255), thickness=1, circle_radius=2
-            ),
-            connection_drawing_spec=mp_drawing.DrawingSpec(
-                color=(255, 249, 161), thickness=2, circle_radius=2
-            ),
-        )
+        # Verifica existencia antes de dibujar
+        if results.left_hand_landmarks:
+            mp_drawing.draw_landmarks(
+                image,
+                landmark_list=results.left_hand_landmarks,
+                connections=mp_holistic.HAND_CONNECTIONS,
+                landmark_drawing_spec=mp_drawing.DrawingSpec(
+                    color=(232, 254, 255), thickness=1, circle_radius=1
+                ),
+                connection_drawing_spec=mp_drawing.DrawingSpec(
+                    color=(255, 249, 161), thickness=2, circle_radius=2
+                ),
+            )
+
+        if results.right_hand_landmarks:
+            mp_drawing.draw_landmarks(
+                image,
+                landmark_list=results.right_hand_landmarks,
+                connections=mp_holistic.HAND_CONNECTIONS,
+                landmark_drawing_spec=mp_drawing.DrawingSpec(
+                    color=(232, 254, 255), thickness=1, circle_radius=2
+                ),
+                connection_drawing_spec=mp_drawing.DrawingSpec(
+                    color=(255, 249, 161), thickness=2, circle_radius=2
+                ),
+            )
+
+        # Si usas también cuerpo o rostro, agrega chequeos para pose_landmarks y face_landmarks
+        if results.pose_landmarks:
+            mp_drawing.draw_landmarks(
+                image,
+                landmark_list=results.pose_landmarks,
+                connections=mp_holistic.POSE_CONNECTIONS,
+                landmark_drawing_spec=mp_drawing.DrawingSpec(color=(255, 0, 0), thickness=2, circle_radius=2),
+                connection_drawing_spec=mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2),
+            )
+    def update(self, frame: np.ndarray, results, sign_detected: str, is_recording: bool):
+        self.sign_detected = sign_detected
+
+        # Dibujar landmarks
+        self.draw_landmarks(frame, results)
+
+        # Redimensionar frame
+        WIDTH = int(HEIGHT * len(frame[0]) / len(frame))
+        frame = cv2.resize(frame, (WIDTH, HEIGHT), interpolation=cv2.INTER_AREA)
+        frame = cv2.flip(frame, 1)
+
+        # Escribir resultado (seña detectada)
+        frame = self.draw_text(frame)
+
+        # Dibujar círculo grabación
+        color = RED_COLOR if is_recording else WHITE_COLOR
+        cv2.circle(frame, (30, 30), 20, color, -1)
+
+        return frame  
