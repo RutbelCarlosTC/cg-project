@@ -73,7 +73,7 @@ class MainApp(ctk.CTk):
         try:
             if not pygame.mixer.get_init():
                 pygame.mixer.init()
-            ruta = f"assets/senas/musica_relajante.mp3"
+            ruta = f"assets/music/musica_prueba.mp3"
             pygame.mixer.music.load(ruta)
             pygame.mixer.music.set_volume(0.4)
             pygame.mixer.music.play(-1)
