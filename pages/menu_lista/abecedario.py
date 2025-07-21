@@ -29,7 +29,7 @@ class SenhaWindow(tk.Toplevel):
         
         # Cargar imagen
         try:
-            imagen = Image.open(f"assets/games/alfabeto.jpg")
+            imagen = Image.open(f"assets/games/alfabeto2.png")
             # Redimensionar la imagen a un tamaño más compacto
             imagen = imagen.resize((500, 350), Image.Resampling.LANCZOS)
             img_tk = ImageTk.PhotoImage(imagen)

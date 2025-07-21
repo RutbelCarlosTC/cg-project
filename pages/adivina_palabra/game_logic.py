@@ -17,21 +17,28 @@ class GameLogic:
         self.esperando_resultado = False  # <- Agrega esto
 
         
-        # Palabras disponibles organizadas por categorías
+        # Palabras disponibles ampliadas
         self.palabras_disponibles = {
             "vocales": ["A", "E", "I", "O", "U"],
-            "consonantes": ["P", "R"]
+            "consonantes": ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", 
+                           "N", "Ñ", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
         }
         
-        # Plantillas de oraciones (sin conectores)
+         # Plantillas de oraciones ampliadas
         self.plantillas_oraciones = [
-            ["C", "O", "C", "O", "C"],           # Mi vecino botó (la) basura
-            ["C", "U", "C", "C", "C"],                  # Mi compañero juega
-            ["C", "U"],                # (El) vecino (tiene) casa verde
-            ["C", "C", "C"],                      # Mi casa (es) celeste
-            ["U", "C", "C", "C"],                   # (El) compañero aplaude
-            ["C", "C", "C"],                       # Gracias vecino
-            ["C"]                       # Adiós compañero               # Casa verde (del) compañero
+            # Niveles 1-2 (2-3 letras)
+            ["S", "I"], ["N", "O"], ["V", "I"], ["C", "A"],
+            ["V", "E", "R"], ["S", "O", "L"], ["D", "O", "S"],
+            
+            # Niveles 3-5 (3-5 letras)
+            ["C", "A", "S", "A"], ["V", "A", "S", "O"],
+            ["C", "A", "M", "A"], ["M", "A", "M", "A"],
+            ["P", "A", "D", "R", "E"], ["M", "A", "D", "R", "E"],
+            
+            # Niveles 6+ (palabras reales)
+            ["H", "O", "L", "A"], ["A", "M", "O", "R"], ["L", "U", "Z"],
+            ["M", "I", "O"], ["D", "O", "S"], ["M", "I", "L"],
+            ["M", "A", "R"], ["A", "M", "E"], ["R", "I", "O"]
         ]
         
         # Sistema de reconocimiento
@@ -146,7 +153,7 @@ class GameLogic:
         self.sign_recorder.record()
 
         # Restaurar estado después de 1 segundo
-        self.parent.after(1000, lambda: self._restaurar_estado_grabacion())
+        self.parent.after(1500, lambda: self._restaurar_estado_grabacion())
     
     def _restaurar_estado_grabacion(self):
         """Restaurar estado de grabación en UI y cámara"""
@@ -211,6 +218,7 @@ class GameLogic:
 
         if self.paso_actual < len(self.secuencia_actual):
             palabra_esperada = self.secuencia_actual[self.paso_actual]
+            
             if sign_detected.upper() == palabra_esperada.upper():
                 self.esperando_resultado = True
                 self.parent.ui.mostrar_mensaje_resultado("✅ Seña correcta", correcto=True)
