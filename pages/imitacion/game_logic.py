@@ -16,15 +16,12 @@ class GameLogic:
 
         # Palabras por categoría
         self.palabras_disponibles = {
-            "despedidas": ["Adios", "Hasta luego", "Hasta manana"],
-            "cortesia": ["Gracias"],
+            "despedidas": ["Adios", "Hasta luego"],
+            "cortesia": ["De nada"],
             "lugares": ["Casa"],
             "personas": ["Vecino", "Companero"],
             "colores": ["Celeste", "Verde"],
             "posesivos": ["Mi"],
-            "acciones": ["Jugar", "Aplaudir", "Botar"],
-            "objetos": ["Basura"],
-            "preposiciones": ["De"]
         }
 
         # Reconocimiento
