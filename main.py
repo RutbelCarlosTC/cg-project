@@ -9,6 +9,8 @@ from pages.secuencia.secuencia_senas import SecuenciaSeñasGame
 from pages.imitacion.imitacion_senas import ImitacionSeñasGame
 from pages.adivina_palabra.secuencia_senas import AdivinaPalabraGame
 from pages.ahorcado.ahorcado_senas import AhorcadoSeñasGame
+from pages.opciones.opciones import OpcionesWindow
+
 
 class MainApp(ctk.CTk):
     def __init__(self):
@@ -123,6 +125,8 @@ class MainApp(ctk.CTk):
             self.show_frame("GameSelectionPage")
         elif option == "Lista de Señas":
             self.show_frame("ListaSenasWindow")
+        elif option == "Opciones":
+            OpcionesWindow(self)
         else:
             print(f"Seleccionaste: {option}")
     
