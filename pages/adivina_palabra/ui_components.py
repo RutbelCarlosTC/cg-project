@@ -178,7 +178,7 @@ class SecuenciaUI:
             scroll_frame,
             "▶️ Cómo Empezar",
             "1. Presiona el botón '🎮 Iniciar Juego'\n" +
-            "2. Se mostrará una secuencia de palabras con emojis\n" +
+            "2. Se mostrará una secuencia de letras \n" +
             "3. Sigue las instrucciones que aparecen en pantalla"
         )
         
@@ -187,20 +187,8 @@ class SecuenciaUI:
             "🤲 Realizar Señas",
             "1. Posiciónate frente a la cámara\n" +
             "2. Presiona '🔴 Grabar Seña' cuando esté habilitado\n" +
-            "3. Realiza la seña de la palabra indicada\n" +
+            "3. Realiza la seña de la letra indicada\n" +
             "4. El sistema detectará y evaluará tu seña automáticamente"
-        )
-        
-        self._add_help_section(
-            scroll_frame,
-            "📊 Palabras Disponibles",
-            "• Adiós 👋\n" +
-            "• Gracias 🙏\n" +
-            "• De nada 😊\n" +
-            "• Lo siento 😔\n" +
-            "• Por favor 🙏\n" +
-            "• Hasta mañana 🌙\n" +
-            "• Hasta luego 👋"
         )
         
         self._add_help_section(
@@ -413,26 +401,7 @@ class SecuenciaUI:
             # Crear frame para cada palabra
             word_frame = ctk.CTkFrame(words_frame, fg_color="#FFFFFF", corner_radius=8)
             word_frame.pack(side="left", padx=5, pady=5)
-            
-            # Emoji representativo
-            emoji_map = {
-                # Palabras de cortesía
-                "Adiós": "👋", 
-                "Gracias": "🙏", 
-                "De nada": "😊", 
-                "Lo siento": "😔", 
-                "Por favor": "🙏",
-                # Despedidas
-                "Hasta mañana": "🌙", 
-                "Hasta luego": "👋",
-            }
-            
-            emoji_label = ctk.CTkLabel(
-                word_frame,
-                text=emoji_map.get(palabra, "🤟"),
-                font=ctk.CTkFont(size=24)
-            )
-            emoji_label.pack(padx=10, pady=(10, 5))
+        
             
             word_label = ctk.CTkLabel(
                 word_frame,
