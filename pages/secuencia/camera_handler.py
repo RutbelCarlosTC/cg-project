@@ -120,20 +120,24 @@ class CameraHandler:
         """Mostrar frame en la interfaz"""
         try:
             # Redimensionar frame
-             # Convertir a RGB y luego a PIL.Image
+            frame = cv2.resize(frame, (600, 500))
+            frame = cv2.flip(frame, 1)  # Efecto espejo
+            
+            # Convertir a RGB
             frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # Convertir a ImageTk
             image = Image.fromarray(frame_rgb)
-
-            # Usar CTkImage para evitar el warning
-            ctk_image = CTkImage(light_image=image, size=image.size)
-
-            # Mostrar imagen en la interfaz
+            photo = ImageTk.PhotoImage(image)
+            
+            # Actualizar label (debe ejecutarse en el hilo principal)
             if self.parent.ui.video_label.winfo_exists():
-                self.parent.ui.video_label.configure(image=ctk_image, text="")
-                self.parent.ui.video_label.image = ctk_image  # Mantener referencia
-
+                self.parent.ui.video_label.configure(image=photo, text="")
+                self.parent.ui.video_label.image = photo  # Mantener referencia
+                
         except Exception as e:
             print(f"Error al mostrar frame: {e}")
+    
     def detener_camara(self):
         """Detener la cámara"""
         self.camera_running = False
